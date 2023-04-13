@@ -1,0 +1,79 @@
+# Algoritmo Genetico:
+# Negli algoritmi genetici viene mantenuta una popolazione di “soluzioni candidate”, chiamate individui. Tali individui sono valutati
+# ed usati per creare una nuova generazione di possibili soluzioni. 
+# Ogni "individuo" è rappresentato da un Cromosoma costituito da una collezione di geni. Si mantiene una popolazione di individui e ad 
+# ogni iterazione gli individui sono valutati e selezionati per la costruzione della successiva generazione. In particolare gli individui
+# con la valutazione migliore avranno una maggiore propabilità di essere selezionati.
+# Per creare due nuovi individui sono scelti due genitori dalla popolazione e parti dei loro cromosomi vengono intersambiati. 
+# Con una certa probabilità viene attuato l'operatore mutazione che varia casulamente parte di un cromosoma spingendo la ricerca in aree 
+# inesplorate del problema.
+
+# Punto chiave:
+#  * Selezione: seleziona gli individui per costruire la successiva generazione
+from numpy.random import randint
+
+def tournamentSelection(population, scores, round=3):
+
+    selected = randint(len(population))
+
+    for opponent in randint(0, len(population), round):
+        if scores[selected] < scores[opponent]:
+            selected = opponent
+        
+    return population[selected]
+
+# Punto chiave:
+#  * Crossover: mantiene la diversità della popolazione riunendo i tratti milgiori 
+from random import random
+from random import randint
+
+def crossover(parent1, parent2, cross_rate = 0.8):
+    chlid1, child2 = parent1.copy(), parent2.copy()
+
+    if random() < cross_rate:
+        crossover_point = randint(1, len(parent1)-2)
+
+        chlid1 = parent1[:crossover_point] + parent2[crossover_point:]
+        chlid2 = parent2[:crossover_point] + parent1[crossover_point:]
+    return [chlid1, chlid2]
+
+# Punto chiave:
+#  * Mutazione: variazioni casuali nei tratti
+from random import random
+
+def mutation(chromosome, mutation_rate=0.2):
+    for i in range(len(chromosome)):
+        if random() < mutation_rate:
+            chromosome[i] = 1 - chromosome[i]
+
+#Pre-cond: 
+#  - population: la popolazione di partenza
+#  - objective: lambda function per la valutazione dei cromosomi. prende un cromosoma e restituisce la valutazione
+#  - max-gen: numero massimo di generazioni
+def geneticAlgorithm(population, objective, max_gen):
+
+    best = population[0]
+    best_val = objective(best)
+
+    for gen in range(max_gen):
+        scores = [objective(chromosome) for chromosome in population]
+
+        for i in range(len(population)):
+            if scores[i] > best_val:
+                best_val = scores[i]
+                best = population[i]
+
+        selected = [tournamentSelection(population, scores) for _ in range(len(population))]
+
+
+        children = []
+        for i in range(0, len(population), 2):
+            parent1, parent2 = selected[i], selected[i+1]
+
+            for chromosome in crossover(parent1, parent2):
+                mutation(chromosome)
+                children.append(chromosome)
+        
+        population = children
+    
+    return [best, best_val]
