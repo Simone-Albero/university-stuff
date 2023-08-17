@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<archive xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="simul.jsimg" timestamp="Tue Jun 20 12:03:29 CEST 2023" xsi:noNamespaceSchemaLocation="Archive.xsd">
+    <sim disableStatisticStop="false" logDecimalSeparator="," logDelimiter=";" logPath="/Users/simone/JMT" logReplaceMode="0" maxEvents="-1" maxSamples="1000000" name="simul.jsimg" polling="1.0" xsi:noNamespaceSchemaLocation="SIMmodeldefinition.xsd">
+        <userClass customers="0" name="CPU_intensive" priority="0" referenceSource="RefStation" type="closed"/>
+        <userClass customers="1" name="Disk_intensive" priority="0" referenceSource="RefStation" type="closed"/>
+        <node name="Router">
+            <section className="Queue">
+                <parameter classPath="java.lang.Integer" name="size">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                </parameter>
+                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                </parameter>
+            </section>
+            <section className="ServiceTunnel"/>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.EmpiricalStrategy" name="Probabilities">
+                        <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>RefStation</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>CPU</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>Disk</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.EmpiricalStrategy" name="Probabilities">
+                        <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>RefStation</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>CPU</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>Disk</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                </parameter>
+            </section>
+        </node>
+        <node name="RefStation">
+            <section className="Queue">
+                <parameter classPath="java.lang.Integer" name="size">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                </parameter>
+                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                </parameter>
+            </section>
+            <section className="ServiceTunnel"/>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                </parameter>
+            </section>
+        </node>
+        <node name="CPU">
+            <section className="Queue">
+                <parameter classPath="java.lang.Integer" name="size">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                </parameter>
+                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                </parameter>
+            </section>
+            <section className="PSServer">
+                <parameter classPath="java.lang.Integer" name="maxJobs">
+                    <value>27</value>
+                </parameter>
+                <parameter classPath="java.lang.Integer" name="maxRunning">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.Integer" name="numberOfVisits">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                </parameter>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>0.3599024280116233</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>2.058317053157509</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                </parameter>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.PSStrategy" name="PSStrategy">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.PSStrategies.EPSStrategy" name="EPSStrategy"/>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.PSStrategies.EPSStrategy" name="EPSStrategy"/>
+                </parameter>
+                <parameter array="true" classPath="java.lang.Double" name="serviceWeights">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="java.lang.Double" name="serviceWeight">
+                        <value>1.0</value>
+                    </subParameter>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="java.lang.Double" name="serviceWeight">
+                        <value>1.0</value>
+                    </subParameter>
+                </parameter>
+            </section>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                </parameter>
+            </section>
+        </node>
+        <node name="Disk">
+            <section className="Queue">
+                <parameter classPath="java.lang.Integer" name="size">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                </parameter>
+                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                </parameter>
+            </section>
+            <section className="PSServer">
+                <parameter classPath="java.lang.Integer" name="maxJobs">
+                    <value>28</value>
+                </parameter>
+                <parameter classPath="java.lang.Integer" name="maxRunning">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.Integer" name="numberOfVisits">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                </parameter>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>7.132017418825687</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>0.24858859986909365</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                </parameter>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.PSStrategy" name="PSStrategy">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.PSStrategies.EPSStrategy" name="EPSStrategy"/>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.PSStrategies.EPSStrategy" name="EPSStrategy"/>
+                </parameter>
+                <parameter array="true" classPath="java.lang.Double" name="serviceWeights">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="java.lang.Double" name="serviceWeight">
+                        <value>1.0</value>
+                    </subParameter>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="java.lang.Double" name="serviceWeight">
+                        <value>1.0</value>
+                    </subParameter>
+                </parameter>
+            </section>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>CPU_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Disk_intensive</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                </parameter>
+            </section>
+        </node>
+        <measure alpha="0.01" name="CPU_CPU_intensive_Number of Customers" nodeType="station" precision="0.03" referenceNode="CPU" referenceUserClass="CPU_intensive" type="Number of Customers" verbose="false"/>
+        <measure alpha="0.01" name="CPU_CPU_intensive_Residence Time" nodeType="station" precision="0.03" referenceNode="CPU" referenceUserClass="CPU_intensive" type="Residence Time" verbose="false"/>
+        <measure alpha="0.01" name="CPU_CPU_intensive_Throughput" nodeType="station" precision="0.03" referenceNode="CPU" referenceUserClass="CPU_intensive" type="Throughput" verbose="false"/>
+        <measure alpha="0.01" name="CPU_CPU_intensive_Utilization" nodeType="station" precision="0.03" referenceNode="CPU" referenceUserClass="CPU_intensive" type="Utilization" verbose="false"/>
+        <measure alpha="0.01" name="Disk_CPU_intensive_Number of Customers" nodeType="station" precision="0.03" referenceNode="Disk" referenceUserClass="CPU_intensive" type="Number of Customers" verbose="false"/>
+        <measure alpha="0.01" name="Disk_CPU_intensive_Residence Time" nodeType="station" precision="0.03" referenceNode="Disk" referenceUserClass="CPU_intensive" type="Residence Time" verbose="false"/>
+        <measure alpha="0.01" name="Disk_CPU_intensive_Throughput" nodeType="station" precision="0.03" referenceNode="Disk" referenceUserClass="CPU_intensive" type="Throughput" verbose="false"/>
+        <measure alpha="0.01" name="Disk_CPU_intensive_Utilization" nodeType="station" precision="0.03" referenceNode="Disk" referenceUserClass="CPU_intensive" type="Utilization" verbose="false"/>
+        <measure alpha="0.01" name="CPU_Disk_intensive_Number of Customers" nodeType="station" precision="0.03" referenceNode="CPU" referenceUserClass="Disk_intensive" type="Number of Customers" verbose="false"/>
+        <measure alpha="0.01" name="CPU_Disk_intensive_Residence Time" nodeType="station" precision="0.03" referenceNode="CPU" referenceUserClass="Disk_intensive" type="Residence Time" verbose="false"/>
+        <measure alpha="0.01" name="CPU_Disk_intensive_Throughput" nodeType="station" precision="0.03" referenceNode="CPU" referenceUserClass="Disk_intensive" type="Throughput" verbose="false"/>
+        <measure alpha="0.01" name="CPU_Disk_intensive_Utilization" nodeType="station" precision="0.03" referenceNode="CPU" referenceUserClass="Disk_intensive" type="Utilization" verbose="false"/>
+        <measure alpha="0.01" name="Disk_Disk_intensive_Number of Customers" nodeType="station" precision="0.03" referenceNode="Disk" referenceUserClass="Disk_intensive" type="Number of Customers" verbose="false"/>
+        <measure alpha="0.01" name="Disk_Disk_intensive_Residence Time" nodeType="station" precision="0.03" referenceNode="Disk" referenceUserClass="Disk_intensive" type="Residence Time" verbose="false"/>
+        <measure alpha="0.01" name="Disk_Disk_intensive_Throughput" nodeType="station" precision="0.03" referenceNode="Disk" referenceUserClass="Disk_intensive" type="Throughput" verbose="false"/>
+        <measure alpha="0.01" name="Disk_Disk_intensive_Utilization" nodeType="station" precision="0.03" referenceNode="Disk" referenceUserClass="Disk_intensive" type="Utilization" verbose="false"/>
+        <connection source="Router" target="RefStation"/>
+        <connection source="Router" target="CPU"/>
+        <connection source="Router" target="Disk"/>
+        <connection source="RefStation" target="Router"/>
+        <connection source="CPU" target="Router"/>
+        <connection source="Disk" target="Router"/>
+        <preload>
+            <stationPopulations stationName="RefStation">
+                <classPopulation population="1" refClass="Disk_intensive"/>
+            </stationPopulations>
+        </preload>
+    </sim>
+    <jmodel xsi:noNamespaceSchemaLocation="JModelGUI.xsd">
+        <userClass color="#FF0000FF" name="CPU_intensive"/>
+        <userClass color="#FFFF0000" name="Disk_intensive"/>
+        <station name="Router">
+            <position angle="0.0" rotate="false" x="25.0" y="94.0"/>
+        </station>
+        <station name="RefStation">
+            <position angle="0.0" rotate="false" x="156.0" y="204.0"/>
+        </station>
+        <station name="CPU">
+            <position angle="0.0" rotate="false" x="144.0" y="290.0"/>
+        </station>
+        <station name="Disk">
+            <position angle="0.0" rotate="false" x="144.0" y="91.0"/>
+        </station>
+        <parametric classPath="jmt.gui.common.definitions.parametric.NumberOfCustomerParametricAnalysis" enabled="true">
+            <field name="Class" value="Disk_intensive"/>
+            <field name="Is single class" value="true"/>
+            <field name="Steps" value="10"/>
+            <field name="To" value="20.0"/>
+            <field name="Type" value="Number of customers"/>
+        </parametric>
+    </jmodel>
+    <results elapsedTime="0" logDecimalSeparator="," logDelimiter=";" pollingInterval="0.0" xsi:noNamespaceSchemaLocation="Results.xsd">
+        <measure alpha="0.99" analyzedSamples="10" name="CPU_CPU_intensive_Number of Customers" nodeType="station" precision="0.03" referenceClass="CPU_intensive" referenceStation="CPU" type="0">
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="CPU_CPU_intensive_Residence Time" nodeType="station" precision="0.03" referenceClass="CPU_intensive" referenceStation="CPU" type="3">
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="CPU_CPU_intensive_Throughput" nodeType="station" precision="0.03" referenceClass="CPU_intensive" referenceStation="CPU" type="5">
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="CPU_CPU_intensive_Utilization" nodeType="station" precision="0.03" referenceClass="CPU_intensive" referenceStation="CPU" type="6">
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="Disk_CPU_intensive_Number of Customers" nodeType="station" precision="0.03" referenceClass="CPU_intensive" referenceStation="Disk" type="0">
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="Disk_CPU_intensive_Residence Time" nodeType="station" precision="0.03" referenceClass="CPU_intensive" referenceStation="Disk" type="3">
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="Disk_CPU_intensive_Throughput" nodeType="station" precision="0.03" referenceClass="CPU_intensive" referenceStation="Disk" type="5">
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="Disk_CPU_intensive_Utilization" nodeType="station" precision="0.03" referenceClass="CPU_intensive" referenceStation="Disk" type="6">
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+            <sample lowerBound="0.0" meanValue="0.0" upperBound="0.0" validity="false"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="CPU_Disk_intensive_Number of Customers" nodeType="station" precision="0.03" referenceClass="Disk_intensive" referenceStation="CPU" type="0">
+            <sample lowerBound="0.10396612349638575" meanValue="0.10690615173438726" upperBound="0.10984617997238878" validity="true"/>
+            <sample lowerBound="0.31444897661804216" meanValue="0.3228863149810416" upperBound="0.331323653344041" validity="true"/>
+            <sample lowerBound="0.5262591104537946" meanValue="0.5405216658992823" upperBound="0.55478422134477" validity="true"/>
+            <sample lowerBound="0.737974057595949" meanValue="0.7521466714618114" upperBound="0.7663192853276737" validity="true"/>
+            <sample lowerBound="0.9550850983132894" meanValue="0.9755712465410404" upperBound="0.9960573947687915" validity="true"/>
+            <sample lowerBound="1.1416617244637284" meanValue="1.1748020203176333" upperBound="1.2079423161715381" validity="true"/>
+            <sample lowerBound="1.3574938053452261" meanValue="1.3929275549917648" upperBound="1.4283613046383035" validity="true"/>
+            <sample lowerBound="1.5365045178506074" meanValue="1.5823809414627643" upperBound="1.6282573650749212" validity="true"/>
+            <sample lowerBound="1.7877588948301195" meanValue="1.8315878108423636" upperBound="1.8754167268546076" validity="true"/>
+            <sample lowerBound="2.1067962660839923" meanValue="2.1599429888012343" upperBound="2.213089711518476" validity="true"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="CPU_Disk_intensive_Residence Time" nodeType="station" precision="0.03" referenceClass="Disk_intensive" referenceStation="CPU" type="3">
+            <sample lowerBound="0.46210892782189966" meanValue="0.4761122328011182" upperBound="0.4901155377803367" validity="true"/>
+            <sample lowerBound="0.47826498025918757" meanValue="0.48765279807253525" upperBound="0.49704061588588294" validity="true"/>
+            <sample lowerBound="0.4623827214912674" meanValue="0.47647063240793003" upperBound="0.4905585433245927" validity="true"/>
+            <sample lowerBound="0.47845353524226625" meanValue="0.488826247533019" upperBound="0.4991989598237718" validity="true"/>
+            <sample lowerBound="0.4781851363866005" meanValue="0.4860139980876487" upperBound="0.49384285978869696" validity="true"/>
+            <sample lowerBound="0.4787727216615159" meanValue="0.49274647206151917" upperBound="0.5067202224615225" validity="true"/>
+            <sample lowerBound="0.47098804847196607" meanValue="0.48083539242388945" upperBound="0.49068273637581283" validity="true"/>
+            <sample lowerBound="0.47586262089785286" meanValue="0.4834819536632808" upperBound="0.49110128642870876" validity="true"/>
+            <sample lowerBound="0.4831472286116448" meanValue="0.49433601726494725" upperBound="0.5055248059182498" validity="true"/>
+            <sample lowerBound="0.47788200983837226" meanValue="0.4865661344788127" upperBound="0.4952502591192531" validity="true"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="CPU_Disk_intensive_Throughput" nodeType="station" precision="0.03" referenceClass="Disk_intensive" referenceStation="CPU" type="5">
+            <sample lowerBound="0.21604913693893366" meanValue="0.2212777708849989" upperBound="0.22676575923496545" validity="true"/>
+            <sample lowerBound="0.6484970551814168" meanValue="0.6649575387192549" upperBound="0.6822754014989139" validity="true"/>
+            <sample lowerBound="1.089704739893389" meanValue="1.1126855783002898" upperBound="1.1366565865780414" validity="true"/>
+            <sample lowerBound="1.5327754840340388" meanValue="1.576933619298522" upperBound="1.6237115559668351" validity="true"/>
+            <sample lowerBound="1.941235397723453" meanValue="1.9993260825748884" upperBound="2.061000695568907" validity="true"/>
+            <sample lowerBound="2.3786274943258756" meanValue="2.4354953680292337" upperBound="2.495149021130955" validity="true"/>
+            <sample lowerBound="2.7993175694476986" meanValue="2.8653449895537753" upperBound="2.93456242606328" validity="true"/>
+            <sample lowerBound="3.191832353732586" meanValue="3.2810540272602333" upperBound="3.3754071902640583" validity="true"/>
+            <sample lowerBound="3.6788324335450646" meanValue="3.7600541646495964" upperBound="3.8449433129091535" validity="true"/>
+            <sample lowerBound="4.329024844801888" meanValue="4.433982446318819" upperBound="4.544155920349948" validity="true"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="CPU_Disk_intensive_Utilization" nodeType="station" precision="0.03" referenceClass="Disk_intensive" referenceStation="CPU" type="6">
+            <sample lowerBound="0.003850597166532808" meanValue="0.003959487101273601" upperBound="0.0040683770360143935" validity="true"/>
+            <sample lowerBound="0.011646258393260833" meanValue="0.011958752406705249" upperBound="0.012271246420149665" validity="true"/>
+            <sample lowerBound="0.019491078164955346" meanValue="0.020019320959232673" upperBound="0.02054756375351" validity="true"/>
+            <sample lowerBound="0.027332372503553668" meanValue="0.027857284128215247" upperBound="0.028382195752876826" validity="true"/>
+            <sample lowerBound="0.03537352215975149" meanValue="0.036132268390408895" upperBound="0.0368910146210663" validity="true"/>
+            <sample lowerBound="0.04228376757273074" meanValue="0.043511185937690135" upperBound="0.04473860430264953" validity="true"/>
+            <sample lowerBound="0.05027754834611945" meanValue="0.05158990944413941" upperBound="0.05290227054215937" validity="true"/>
+            <sample lowerBound="0.056907574735207724" meanValue="0.058606701535657925" upperBound="0.060305828336108126" validity="true"/>
+            <sample lowerBound="0.06621329240111563" meanValue="0.06783658558675426" upperBound="0.06945987877239289" validity="true"/>
+            <sample lowerBound="0.07802949133644417" meanValue="0.07999788847411979" upperBound="0.0819662856117954" validity="true"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="Disk_Disk_intensive_Number of Customers" nodeType="station" precision="0.03" referenceClass="Disk_intensive" referenceStation="Disk" type="0">
+            <sample lowerBound="0.8647529872591176" meanValue="0.8910939743246432" upperBound="0.9174349613901688" validity="true"/>
+            <sample lowerBound="2.6064526683760527" meanValue="2.67367938321788" upperBound="2.7409060980597073" validity="true"/>
+            <sample lowerBound="4.351903403761408" meanValue="4.475591108829105" upperBound="4.599278813896802" validity="true"/>
+            <sample lowerBound="6.050376341255315" meanValue="6.228296623249321" upperBound="6.406216905243327" validity="true"/>
+            <sample lowerBound="7.9096145719788264" meanValue="8.018995040036268" upperBound="8.12837550809371" validity="true"/>
+            <sample lowerBound="9.507537208669333" meanValue="9.797813671887882" upperBound="10.08809013510643" validity="true"/>
+            <sample lowerBound="11.26813420229736" meanValue="11.597210553419579" upperBound="11.926286904541799" validity="true"/>
+            <sample lowerBound="13.247332456305845" meanValue="13.431901913126557" upperBound="13.61647136994727" validity="true"/>
+            <sample lowerBound="14.715107896952862" meanValue="15.145813666516137" upperBound="15.576519436079412" validity="true"/>
+            <sample lowerBound="17.28069761805715" meanValue="17.787347211736897" upperBound="18.293996805416644" validity="true"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="Disk_Disk_intensive_Residence Time" nodeType="station" precision="0.03" referenceClass="Disk_intensive" referenceStation="Disk" type="3">
+            <sample lowerBound="3.914636940806321" meanValue="4.00248227832848" upperBound="4.090327615850637" validity="true"/>
+            <sample lowerBound="3.9568562368130453" meanValue="4.035349072817586" upperBound="4.113841908822126" validity="true"/>
+            <sample lowerBound="3.957926069744618" meanValue="4.021799819057359" upperBound="4.085673568370101" validity="true"/>
+            <sample lowerBound="3.908799881131799" meanValue="3.9889981540571617" upperBound="4.069196426982525" validity="true"/>
+            <sample lowerBound="3.9264442932725765" meanValue="3.998523746112679" upperBound="4.0706031989527816" validity="true"/>
+            <sample lowerBound="3.9660391668404147" meanValue="4.0862467023870455" upperBound="4.206454237933675" validity="true"/>
+            <sample lowerBound="3.929934208421331" meanValue="4.004455261251464" upperBound="4.078976314081597" validity="true"/>
+            <sample lowerBound="4.00994876885589" meanValue="4.07788336857041" upperBound="4.14581796828493" validity="true"/>
+            <sample lowerBound="3.974335338712457" meanValue="4.035556551818687" upperBound="4.0967777649249175" validity="true"/>
+            <sample lowerBound="3.8880672849771574" meanValue="4.008009480114039" upperBound="4.12795167525092" validity="true"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="Disk_Disk_intensive_Throughput" nodeType="station" precision="0.03" referenceClass="Disk_intensive" referenceStation="Disk" type="5">
+            <sample lowerBound="0.21692902083331816" meanValue="0.22147678158194303" upperBound="0.22621930648083693" validity="true"/>
+            <sample lowerBound="0.6538200786616265" meanValue="0.6662598876276288" upperBound="0.6791822460402615" validity="true"/>
+            <sample lowerBound="1.0942127044224546" meanValue="1.1101003038948627" upperBound="1.126456066105645" validity="true"/>
+            <sample lowerBound="1.5214670554825995" meanValue="1.552316614801046" upperBound="1.584443088301154" validity="true"/>
+            <sample lowerBound="1.9575643529720475" meanValue="1.9923165847619515" upperBound="2.028325015845666" validity="true"/>
+            <sample lowerBound="2.364907872381357" meanValue="2.4233733328366727" upperBound="2.4848028474115083" validity="true"/>
+            <sample lowerBound="2.830060188332545" meanValue="2.8873129306986383" upperBound="2.946929974641609" validity="true"/>
+            <sample lowerBound="3.239667329154315" meanValue="3.3239296892694936" upperBound="3.4126923562561178" validity="true"/>
+            <sample lowerBound="3.70332230468222" meanValue="3.7531726365116165" upperBound="3.804383348605028" validity="true"/>
+            <sample lowerBound="4.354165273950246" meanValue="4.433629534537746" upperBound="4.516048185942747" validity="true"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="10" name="Disk_Disk_intensive_Utilization" nodeType="station" precision="0.03" referenceClass="Disk_intensive" referenceStation="Disk" type="6">
+            <sample lowerBound="0.03088403525925417" meanValue="0.031824784797308665" upperBound="0.03276553433536316" validity="true"/>
+            <sample lowerBound="0.09308759529914476" meanValue="0.09548854940063854" upperBound="0.09788950350213232" validity="true"/>
+            <sample lowerBound="0.15542512156290753" meanValue="0.1598425396010396" upperBound="0.1642599576391717" validity="true"/>
+            <sample lowerBound="0.21608486933054685" meanValue="0.22243916511604717" upperBound="0.22879346090154748" validity="true"/>
+            <sample lowerBound="0.2824862347135295" meanValue="0.28639268000129514" upperBound="0.29029912528906077" validity="true"/>
+            <sample lowerBound="0.3395549003096193" meanValue="0.34992191685313867" upperBound="0.360288933396658" validity="true"/>
+            <sample lowerBound="0.4024333643677628" meanValue="0.41418609119355615" upperBound="0.4259388180193495" validity="true"/>
+            <sample lowerBound="0.4731190162966374" meanValue="0.47971078261166267" upperBound="0.48630254892668795" validity="true"/>
+            <sample lowerBound="0.5255395677483164" meanValue="0.5409219166612903" upperBound="0.5563042655742642" validity="true"/>
+            <sample lowerBound="0.6171677720734697" meanValue="0.6352624004191747" upperBound="0.6533570287648797" validity="true"/>
+        </measure>
+    </results>
+</archive>

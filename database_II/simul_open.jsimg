@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<archive xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="simul_open.jsimg" timestamp="Tue Jun 20 18:54:30 CEST 2023" xsi:noNamespaceSchemaLocation="Archive.xsd">
+    <sim disableStatisticStop="false" logDecimalSeparator="," logDelimiter=";" logPath="/Users/simone/JMT" logReplaceMode="0" maxEvents="-1" maxSamples="1000000" name="simul_open.jsimg" polling="1.0" xsi:noNamespaceSchemaLocation="SIMmodeldefinition.xsd">
+        <userClass name="CPU_intensive_A" priority="0" referenceSource="Source 1" type="open"/>
+        <userClass name="CPU_intensive_B" priority="0" referenceSource="Source 1" type="open"/>
+        <userClass name="Balanced_C" priority="0" referenceSource="Source 1" type="open"/>
+        <userClass name="Disk_intensive_D" priority="0" referenceSource="Source 1" type="open"/>
+        <userClass name="Disk_intensive_E" priority="0" referenceSource="Source 1" type="open"/>
+        <node name="Router">
+            <section className="Queue">
+                <parameter classPath="java.lang.Integer" name="size">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                </parameter>
+                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                </parameter>
+            </section>
+            <section className="ServiceTunnel"/>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.EmpiricalStrategy" name="Probabilities">
+                        <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>CPU</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>Disk</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>Sink 1</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.EmpiricalStrategy" name="Probabilities">
+                        <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>CPU</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>Disk</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>Sink 1</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.EmpiricalStrategy" name="Probabilities">
+                        <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>CPU</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>Disk</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>Sink 1</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.EmpiricalStrategy" name="Probabilities">
+                        <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>CPU</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>Disk</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>Sink 1</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.EmpiricalStrategy" name="Probabilities">
+                        <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>CPU</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>Disk</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                <subParameter classPath="java.lang.String" name="stationName">
+                                    <value>Sink 1</value>
+                                </subParameter>
+                                <subParameter classPath="java.lang.Double" name="probability">
+                                    <value>0.3333333333333333</value>
+                                </subParameter>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                </parameter>
+            </section>
+        </node>
+        <node name="CPU">
+            <section className="Queue">
+                <parameter classPath="java.lang.Integer" name="size">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                </parameter>
+                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                </parameter>
+            </section>
+            <section className="PSServer">
+                <parameter classPath="java.lang.Integer" name="maxJobs">
+                    <value>35</value>
+                </parameter>
+                <parameter classPath="java.lang.Integer" name="maxRunning">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.Integer" name="numberOfVisits">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                </parameter>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>0.3426131670028692</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>0.3426131670028692</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>0.2167940313872131</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>2.058317053157509</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>2.058317053157509</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                </parameter>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.PSStrategy" name="PSStrategy">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.PSStrategies.EPSStrategy" name="EPSStrategy"/>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.PSStrategies.EPSStrategy" name="EPSStrategy"/>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.PSStrategies.EPSStrategy" name="EPSStrategy"/>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.PSStrategies.EPSStrategy" name="EPSStrategy"/>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.PSStrategies.EPSStrategy" name="EPSStrategy"/>
+                </parameter>
+                <parameter array="true" classPath="java.lang.Double" name="serviceWeights">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="java.lang.Double" name="serviceWeight">
+                        <value>1.0</value>
+                    </subParameter>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="java.lang.Double" name="serviceWeight">
+                        <value>1.0</value>
+                    </subParameter>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="java.lang.Double" name="serviceWeight">
+                        <value>1.0</value>
+                    </subParameter>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="java.lang.Double" name="serviceWeight">
+                        <value>1.0</value>
+                    </subParameter>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="java.lang.Double" name="serviceWeight">
+                        <value>1.0</value>
+                    </subParameter>
+                </parameter>
+            </section>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                </parameter>
+            </section>
+        </node>
+        <node name="Disk">
+            <section className="Queue">
+                <parameter classPath="java.lang.Integer" name="size">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                </parameter>
+                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                </parameter>
+            </section>
+            <section className="Server">
+                <parameter classPath="java.lang.Integer" name="maxJobs">
+                    <value>38</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.Integer" name="numberOfVisits">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                </parameter>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>7.132017418825687</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>7.132017418825687</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>0.24812608631156527</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>0.24858859986909365</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>0.24858859986909365</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                </parameter>
+            </section>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                </parameter>
+            </section>
+        </node>
+        <node name="Sink 1">
+            <section className="JobSink"/>
+        </node>
+        <node name="Source 1">
+            <section className="RandomSource">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>2.0</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>2.0</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Burst" name="Burst (General)">
+                            <subParameter classPath="java.lang.Double" name="Probability">
+                                <value>0.9</value>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.DistributionContainer" name="Length-Distribution_IntervalA">
+                                <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                                <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                                    <subParameter classPath="java.lang.Double" name="lambda">
+                                        <value>0.03333333333333333</value>
+                                    </subParameter>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.DistributionContainer" name="Length-Distribution_IntervalB">
+                                <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                                <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                                    <subParameter classPath="java.lang.Double" name="lambda">
+                                        <value>0.3333333333333333</value>
+                                    </subParameter>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="java.lang.Boolean" name="Round-Robin">
+                                <value>false</value>
+                            </subParameter>
+                        </subParameter>
+                        <subParameter classPath="jmt.engine.random.BurstPar" name="distrPar">
+                            <subParameter classPath="jmt.engine.random.DistributionContainer" name="Value-Distribution_IntervalA">
+                                <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                                <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                                    <subParameter classPath="java.lang.Double" name="lambda">
+                                        <value>2.0</value>
+                                    </subParameter>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.random.DistributionContainer" name="Value-Distribution_IntervalB">
+                                <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                                <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                                    <subParameter classPath="java.lang.Double" name="lambda">
+                                        <value>20.0</value>
+                                    </subParameter>
+                                </subParameter>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>2.0</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>2.0</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                </parameter>
+            </section>
+            <section className="ServiceTunnel"/>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>CPU_intensive_A</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>CPU_intensive_B</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Balanced_C</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Disk_intensive_D</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Disk_intensive_E</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                </parameter>
+            </section>
+        </node>
+        <measure alpha="0.01" name="CPU_Utilization" nodeType="station" precision="0.03" referenceNode="CPU" referenceUserClass="" type="Utilization" verbose="false"/>
+        <measure alpha="0.01" name="Disk_Utilization" nodeType="station" precision="0.03" referenceNode="Disk" referenceUserClass="" type="Utilization" verbose="false"/>
+        <measure alpha="0.01" name="CPU_intensive_A_System Response Time" nodeType="" precision="0.03" referenceNode="" referenceUserClass="CPU_intensive_A" type="System Response Time" verbose="false"/>
+        <measure alpha="0.01" name="CPU_intensive_B_System Response Time" nodeType="" precision="0.03" referenceNode="" referenceUserClass="CPU_intensive_B" type="System Response Time" verbose="false"/>
+        <measure alpha="0.01" name="Balanced_C_System Response Time" nodeType="" precision="0.03" referenceNode="" referenceUserClass="Balanced_C" type="System Response Time" verbose="false"/>
+        <measure alpha="0.01" name="Disk_intensive_D_System Response Time" nodeType="" precision="0.03" referenceNode="" referenceUserClass="Disk_intensive_D" type="System Response Time" verbose="false"/>
+        <measure alpha="0.01" name="Disk_intensive_E_System Response Time" nodeType="" precision="0.03" referenceNode="" referenceUserClass="Disk_intensive_E" type="System Response Time" verbose="false"/>
+        <connection source="Router" target="CPU"/>
+        <connection source="Router" target="Disk"/>
+        <connection source="Router" target="Sink 1"/>
+        <connection source="CPU" target="Router"/>
+        <connection source="Disk" target="Router"/>
+        <connection source="Source 1" target="Router"/>
+    </sim>
+    <jmodel xsi:noNamespaceSchemaLocation="JModelGUI.xsd">
+        <userClass color="#FF0000FF" name="CPU_intensive_A"/>
+        <userClass color="#FFFF0000" name="CPU_intensive_B"/>
+        <userClass color="#FF00FF00" name="Balanced_C"/>
+        <userClass color="#FFFF00FF" name="Disk_intensive_D"/>
+        <userClass color="#FFFFC800" name="Disk_intensive_E"/>
+        <station name="Router">
+            <position angle="0.0" rotate="false" x="421.0" y="117.0"/>
+        </station>
+        <station name="CPU">
+            <position angle="0.0" rotate="false" x="538.0" y="206.0"/>
+        </station>
+        <station name="Disk">
+            <position angle="0.0" rotate="false" x="540.0" y="114.0"/>
+        </station>
+        <station name="Sink 1">
+            <position angle="0.0" rotate="false" x="540.0" y="314.0"/>
+        </station>
+        <station name="Source 1">
+            <position angle="0.0" rotate="false" x="274.0" y="33.0"/>
+        </station>
+    </jmodel>
+    <results elapsedTime="6573" logDecimalSeparator="," logDelimiter=";" pollingInterval="1.0" xsi:noNamespaceSchemaLocation="Results.xsd">
+        <measure alpha="0.99" analyzedSamples="409600" discardedSamples="33165" finalValue="0.6857537661394445" name="CPU_Utilization" nodeType="station" precision="0.03" referenceClass="" referenceStation="CPU" state="1" type="6">
+            <sample lastIntervalAvgValue="0.6819165263776943" lowerBound="0.6346573103778607" meanValue="0.6903379977482127" simulationTime="9134.827891673425" upperBound="0.7460186851185647"/>
+            <sample lastIntervalAvgValue="0.6853738906226335" lowerBound="0.6664430981702708" meanValue="0.6857537661394445" simulationTime="26043.343876975538" upperBound="0.7050644341086182"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="286720" discardedSamples="44160" finalValue="0.670162483206406" name="Disk_Utilization" nodeType="station" precision="0.03" referenceClass="" referenceStation="Disk" state="1" type="6">
+            <sample lastIntervalAvgValue="0.6697716498541596" lowerBound="0.6335394039450152" meanValue="0.6713728828887177" simulationTime="9134.818552867895" upperBound="0.7092063618324201"/>
+            <sample lastIntervalAvgValue="0.6724361496734186" lowerBound="0.6515301706867512" meanValue="0.670162483206406" simulationTime="19853.87979782898" upperBound="0.6887947957260608"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="163840" discardedSamples="860" finalValue="3.1879790165241046" name="CPU_intensive_A_System Response Time" nodeType="" precision="0.03" referenceClass="CPU_intensive_A" referenceStation="" state="1" type="15">
+            <sample lastIntervalAvgValue="3.30712549500628" lowerBound="2.6922471014413585" meanValue="3.170072592732538" simulationTime="9134.832817410123" upperBound="3.6478980840237174"/>
+            <sample lastIntervalAvgValue="3.205994901658508" lowerBound="3.0559821316871467" meanValue="3.260170455988077" simulationTime="29818.303658713558" upperBound="3.4643587802890075"/>
+            <sample lastIntervalAvgValue="3.1712461945992625" lowerBound="3.0631432790049438" meanValue="3.2074954592837885" simulationTime="50284.43029906011" upperBound="3.3518476395626333"/>
+            <sample lastIntervalAvgValue="3.185008480065271" lowerBound="3.0631432790049438" meanValue="3.2074954592837885" simulationTime="70718.56793985242" upperBound="3.3518476395626333"/>
+            <sample lastIntervalAvgValue="3.152388828363546" lowerBound="3.110270918347065" meanValue="3.1879790165241046" simulationTime="82106.37675847377" upperBound="3.2656871147011444"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="204800" discardedSamples="10" finalValue="3.189988502107086" name="CPU_intensive_B_System Response Time" nodeType="" precision="0.03" referenceClass="CPU_intensive_B" referenceStation="" state="1" type="15">
+            <sample lastIntervalAvgValue="3.2998452656091084" lowerBound="2.7769494832095534" meanValue="3.287044728543122" simulationTime="9134.840246857702" upperBound="3.797139973876691"/>
+            <sample lastIntervalAvgValue="3.220812823110929" lowerBound="3.0925172559372167" meanValue="3.2740361195168557" simulationTime="29817.407672596444" upperBound="3.4555549830964947"/>
+            <sample lastIntervalAvgValue="3.1816244412173176" lowerBound="3.0925172559372167" meanValue="3.2740361195168557" simulationTime="50284.614603739305" upperBound="3.4555549830964947"/>
+            <sample lastIntervalAvgValue="3.2054804824590546" lowerBound="3.069102424011674" meanValue="3.19551059517499" simulationTime="70718.30248510599" upperBound="3.3219187663383054"/>
+            <sample lastIntervalAvgValue="3.1350577663676753" lowerBound="3.069102424011674" meanValue="3.19551059517499" simulationTime="91028.02915473456" upperBound="3.3219187663383054"/>
+            <sample lastIntervalAvgValue="3.2366213112760196" lowerBound="3.1187172354276527" meanValue="3.189988502107086" simulationTime="102482.55974264491" upperBound="3.2612597687865197"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="286720" discardedSamples="495" finalValue="9.086717201602145" name="Balanced_C_System Response Time" nodeType="" precision="0.03" referenceClass="Balanced_C" referenceStation="" state="1" type="15">
+            <sample lastIntervalAvgValue="9.579560077414053" lowerBound="8.194727464598976" meanValue="9.807983208321321" simulationTime="9134.871146821606" upperBound="11.421238952043666"/>
+            <sample lastIntervalAvgValue="9.11562807306531" lowerBound="8.471768348368622" meanValue="9.315141875563642" simulationTime="29817.116111679854" upperBound="10.158515402758661"/>
+            <sample lastIntervalAvgValue="8.98878498933" lowerBound="8.711215501539147" meanValue="9.2918240444016" simulationTime="50284.57218997029" upperBound="9.872432587264054"/>
+            <sample lastIntervalAvgValue="8.926180039558885" lowerBound="8.747815729733787" meanValue="9.053476741860083" simulationTime="70718.8662934993" upperBound="9.359137753986378"/>
+            <sample lastIntervalAvgValue="8.813420431758008" lowerBound="8.747815729733787" meanValue="9.053476741860083" simulationTime="91028.00991245969" upperBound="9.359137753986378"/>
+            <sample lastIntervalAvgValue="9.228687939507092" lowerBound="8.747815729733787" meanValue="9.053476741860083" simulationTime="111066.69114690919" upperBound="9.359137753986378"/>
+            <sample lastIntervalAvgValue="9.279351921292037" lowerBound="8.915761105616061" meanValue="9.086717201602145" simulationTime="130983.1082362714" upperBound="9.257673297588228"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="81920" discardedSamples="115" finalValue="4.595226210163986" name="Disk_intensive_D_System Response Time" nodeType="" precision="0.03" referenceClass="Disk_intensive_D" referenceStation="" state="1" type="15">
+            <sample lastIntervalAvgValue="4.625159668514581" lowerBound="4.2230077804536235" meanValue="4.55759923584409" simulationTime="9134.331539639476" upperBound="4.892190691234556"/>
+            <sample lastIntervalAvgValue="4.629844013680382" lowerBound="4.4548655548060765" meanValue="4.639428686756465" simulationTime="29816.544595510284" upperBound="4.823991818706853"/>
+            <sample lastIntervalAvgValue="4.531416759466299" lowerBound="4.479946014208908" meanValue="4.595226210163986" simulationTime="40881.12354202111" upperBound="4.710506406119064"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="61440" discardedSamples="360" finalValue="4.651071562049207" name="Disk_intensive_E_System Response Time" nodeType="" precision="0.03" referenceClass="Disk_intensive_E" referenceStation="" state="1" type="15">
+            <sample lastIntervalAvgValue="4.6246740758543154" lowerBound="4.356285567052239" meanValue="4.70339069052705" simulationTime="9133.958851885098" upperBound="5.050495814001862"/>
+            <sample lastIntervalAvgValue="4.661758000275627" lowerBound="4.353470502272298" meanValue="4.6068028587037935" simulationTime="29818.063233437646" upperBound="4.860135215135289"/>
+            <sample lastIntervalAvgValue="4.655978069648502" lowerBound="4.534767205346851" meanValue="4.651071562049207" simulationTime="31136.63546183723" upperBound="4.767375918751563"/>
+        </measure>
+    </results>
+</archive>
