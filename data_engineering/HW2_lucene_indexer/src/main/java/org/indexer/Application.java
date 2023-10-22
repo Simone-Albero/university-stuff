@@ -13,7 +13,11 @@ public class Application {
         directoryParser.parse("../test_corpus", new SimpleTextCodec());
         directoryParser.printStats();
 
+        // query parser
         QueryHandler queryHandler = new QueryHandler("body", "you must not be afraid to be alone");
+        queryHandler.printStats();
+
+        // phrase query
         queryHandler = new QueryHandler(0, "body", "you", "must", "not", "be", "afraid", "to", "be", "alone");
         queryHandler.printStats();
     }

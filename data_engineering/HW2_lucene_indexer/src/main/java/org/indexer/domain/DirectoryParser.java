@@ -18,10 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class DirectoryParser {
 
@@ -38,6 +35,9 @@ public class DirectoryParser {
 
     public void parse(String path, Codec codec) throws IOException {
         try (Directory directory = FSDirectory.open(PATH)) {
+            //indexing start time
+            Date start = new Date();
+
             IndexWriterConfig config = new IndexWriterConfig(this.analyzer);
             if (codec != null) {
                 config.setCodec(codec);
@@ -61,6 +61,12 @@ public class DirectoryParser {
 
             writer.commit();
             writer.close();
+
+            //indexing end time
+            Date end = new Date();
+            long elapsedTime = end.getTime() - start.getTime();
+            System.out.println("the index creation process is done!");
+            System.out.println("Time taken: " + elapsedTime + " ms.");
         }
 
     }
