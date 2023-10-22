@@ -1,0 +1,21 @@
+addestrata per tot tempo
+percentuale vittoria contro giocatore casuale
+partite giocate addestramento 
+                
+stato =	(semeCarta0, fasciaPuntiCarta0, semeCarta1, fasciaPuntiCarta1, semeCarta2, fasciaPuntiCarta2, 
+	puntiAvversarioAlmeno45, self.puntiCartaInFondoAlmeno10, briscola, fasciaBriscoleUscite,
+	almenoUncaricoDenaraUscito, almenoUnCaricoSpadeUscito, almenoUnCaricoBastoniUscito, almenoUnCaricoCoppeUscito)
+eventualmente alla fine info su carta tirata per prima
+(semeCartaTirata, fasciaPuntiCartaTirata)
+
+fascia punti = 1,2,3 a seconda se punti=0 oppure 2<=punti<=4 oppure punti>=10
+
+se briscoleUscite >= 7: fasciaBriscoleUscite = briscoleUscite
+altrimenti: fasciaBriscoleUscite = 0
+
+dimensioni massime =
+4*3*4*3*4*3*2*2*4*5*2*2*2*2*4*3 = 26 milioni circa
+non conta l'ordine delle carte in mano, quindi diviso [3 fattoriale] = 6
+moltiplicato per 3 azioni possibili
+12 milioni circa di possibili stati quando si tira per secondo
+24 milioni circa totali (stati in cui ha solo due carte in mano, oppure quando tira per primo etc)

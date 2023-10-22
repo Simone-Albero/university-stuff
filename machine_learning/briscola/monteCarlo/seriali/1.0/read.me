@@ -1,0 +1,25 @@
+ia addestrata per 4 ore e 30 minuti
+partite giocate addestramento circa 14 milioni
+percentuale vittoria contro giocatore che fa mosse a caso 89%
+
+stato =	(semeCarta0, fasciaPuntiCarta0, semeCarta1, fasciaPuntiCarta1, semeCarta2, fasciaPuntiCarta2, 
+	puntiMieiAlmeno45, puntiAvversarioAlmeno45, briscola, valoreCartaInFondoAlmeno10, carichiUsciti)
+eventualmente alla fine info su carta tirata per prima
+(semeCartaTirata, fasciaPuntiCartaTirata)
+
+fascia punti = 1,2,3 a seconda se punti=0 oppure 2<=punti<=4 oppure punti>=10
+
+dimensioni massime =
+4*3*4*3*4*3*2*2*4*2*9*4*3 = 6 milioni circa
+non conta l'ordine delle carte in mano, quindi diviso [3 fattoriale] = 6
+moltiplicato per 3 mosse possibili
+3 milione circa di possibili stati quando si tira per secondo
+6 milioni circa totali (stati in cui ha solo due carte in mano, oppure quando tira per primo etc)
+
+possibili miglioramenti futuri:
+stato = (semeCarta0, fasciaPuntiCarta0, semeCarta1, fasciaPuntiCarta1, semeCarta2, fasciaPuntiCarta2, 
+	puntiAvversarioAlmeno45, briscola, >carichi usciti per ogni seme<, semeCartaTirata, fasciaPuntiCartaTirata) ??
+dim = 
+4*3*4*3*4*3*2*4*81*4*3 sempre da dividere per 6 + moltiplicare per 3
+circa 7 milioni di stati
+quindi 14 totali

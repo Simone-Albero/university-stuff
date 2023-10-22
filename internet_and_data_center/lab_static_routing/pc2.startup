@@ -1,0 +1,1 @@
+ip a add 200.1.1.7/24 dev eth0
