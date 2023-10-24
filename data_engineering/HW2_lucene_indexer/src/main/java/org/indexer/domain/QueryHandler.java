@@ -1,11 +1,11 @@
 package org.indexer.domain;
 
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -13,7 +13,6 @@ import org.apache.lucene.store.FSDirectory;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,9 +50,9 @@ public class QueryHandler {
             try (Directory directory = FSDirectory.open(PATH)) {
                 try (IndexReader reader = DirectoryReader.open(directory)) {
                     IndexSearcher searcher = new IndexSearcher(reader);
-                    QueryParser queryParser = new QueryParser(field, new WhitespaceAnalyzer());
+                    QueryParser queryParser = new QueryParser(field, new EnglishAnalyzer());
                     Query parsedQuery = queryParser.parse(query);
-                    this.hits = searcher.search(parsedQuery, 10);
+                    this.hits = searcher.search(parsedQuery, 5);
                 }
             }
     }
@@ -63,7 +62,7 @@ public class QueryHandler {
             try (IndexReader reader = DirectoryReader.open(directory)) {
                 IndexSearcher searcher = new IndexSearcher(reader);
                 PhraseQuery query = new PhraseQuery(slop, field, terms);
-                this.hits = searcher.search(query, 10);
+                this.hits = searcher.search(query, 5);
             }
         }
     }

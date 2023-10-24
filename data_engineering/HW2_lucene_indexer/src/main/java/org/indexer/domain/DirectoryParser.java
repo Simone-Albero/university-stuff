@@ -4,6 +4,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
 import org.apache.lucene.analysis.core.WhitespaceTokenizerFactory;
 import org.apache.lucene.analysis.custom.CustomAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.miscellaneous.WordDelimiterGraphFilterFactory;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -34,7 +35,7 @@ public class DirectoryParser {
                 .addTokenFilter(LowerCaseFilterFactory.class)
                 .addTokenFilter(WordDelimiterGraphFilterFactory.class)
                 .build());
-        perFieldAnalyzers.put("body", new StandardAnalyzer());
+        perFieldAnalyzers.put("body", new EnglishAnalyzer());
 
         this.analyzer = new PerFieldAnalyzerWrapper(new StandardAnalyzer(), perFieldAnalyzers);
     }
