@@ -14,11 +14,11 @@ public class Application {
         directoryParser.printStats();
 
         // query parser
-        QueryHandler queryHandler = new QueryHandler("body", "you must not be afraid to be alone");
+        QueryHandler queryHandler = new QueryHandler("body: educating the heart is no education at all");
         queryHandler.printStats();
 
         // phrase query
-        queryHandler = new QueryHandler(0, "body", "you", "must", "not", "be", "afraid", "to", "be", "alone");
+        queryHandler = new QueryHandler("body -s 1: educating the heart is no education at all");
         queryHandler.printStats();
     }
 }

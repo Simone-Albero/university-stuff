@@ -13,28 +13,52 @@ import org.apache.lucene.store.FSDirectory;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class QueryHandler {
 
     private static final Path PATH = Paths.get("target/idx0");
+    private TopDocs hits;
 
-    private final TopDocs hits;
+    public QueryHandler(String query) throws IOException, ParseException {
 
-    public QueryHandler(String field, String terms) throws IOException, ParseException {
-        try (Directory directory = FSDirectory.open(PATH)) {
-            try (IndexReader reader = DirectoryReader.open(directory)) {
-                IndexSearcher searcher = new IndexSearcher(reader);
+        // pattern "field -s slop: terms"
+        Pattern fst_pattern = Pattern.compile("^(.*?)\\s-s\\s(\\d+):\\s(.*?)$");
+        Matcher fst_matcher = fst_pattern.matcher(query);
 
-                QueryParser queryParser = new QueryParser(field, new WhitespaceAnalyzer());
-                Query query = queryParser.parse(terms);
-                this.hits = searcher.search(query, 10);
-            }
+        // pattern "field: query"
+        Pattern snd_pattern = Pattern.compile("^(.*?):\\s(.*?)$");
+        Matcher snd_matcher = snd_pattern.matcher(query);
+
+        if (fst_matcher.matches()) {
+            String field = fst_matcher.group(1);
+            int slop = Integer.parseInt(fst_matcher.group(2));
+            String[] terms = fst_matcher.group(3).split("\\s+");
+            this.phraseQuery(slop, field, terms);
+        }else if (snd_matcher.matches()) {
+            String field = snd_matcher.group(1);
+            String body = snd_matcher.group(2);
+            this.parsedQuery(field, body);
+        }else{
+            throw new ParseException();
         }
+
     }
 
-    public QueryHandler(int slop, String field, java.lang.String... terms) throws IOException, ParseException {
+    private void parsedQuery(String field, String query) throws IOException, ParseException {
+            try (Directory directory = FSDirectory.open(PATH)) {
+                try (IndexReader reader = DirectoryReader.open(directory)) {
+                    IndexSearcher searcher = new IndexSearcher(reader);
+                    QueryParser queryParser = new QueryParser(field, new WhitespaceAnalyzer());
+                    Query parsedQuery = queryParser.parse(query);
+                    this.hits = searcher.search(parsedQuery, 10);
+                }
+            }
+    }
+
+    private void phraseQuery(int slop, String field, String[] terms) throws IOException {
         try (Directory directory = FSDirectory.open(PATH)) {
             try (IndexReader reader = DirectoryReader.open(directory)) {
                 IndexSearcher searcher = new IndexSearcher(reader);
@@ -50,7 +74,7 @@ public class QueryHandler {
                 IndexSearcher searcher = new IndexSearcher(reader);
 
                 //Print the count of matching documents.
-                System.out.println("Found " + hits.totalHits.toString() + " hits!");
+                System.out.println("Found " + hits.totalHits.toString() + "!");
 
                 //Print names and scores of matching documents.
                 for (ScoreDoc scoreDoc : hits.scoreDocs) {

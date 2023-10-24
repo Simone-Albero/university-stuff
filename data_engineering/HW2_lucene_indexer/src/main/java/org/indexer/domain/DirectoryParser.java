@@ -1,11 +1,13 @@
 package org.indexer.domain;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.core.WhitespaceTokenizerFactory;
+import org.apache.lucene.analysis.custom.CustomAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
+import org.apache.lucene.analysis.miscellaneous.WordDelimiterGraphFilterFactory;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.codecs.Codec;
-import org.apache.lucene.codecs.simpletext.SimpleTextCodec;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
@@ -25,9 +27,13 @@ public class DirectoryParser {
     private static final Path PATH = Paths.get("target/idx0");
     private final Analyzer analyzer;
 
-    public DirectoryParser() {
+    public DirectoryParser() throws IOException {
         Map<String, Analyzer> perFieldAnalyzers = new HashMap<>();
-        perFieldAnalyzers.put("name", new WhitespaceAnalyzer());
+        perFieldAnalyzers.put("name", CustomAnalyzer.builder()
+                .withTokenizer(WhitespaceTokenizerFactory.class)
+                .addTokenFilter(LowerCaseFilterFactory.class)
+                .addTokenFilter(WordDelimiterGraphFilterFactory.class)
+                .build());
         perFieldAnalyzers.put("body", new StandardAnalyzer());
 
         this.analyzer = new PerFieldAnalyzerWrapper(new StandardAnalyzer(), perFieldAnalyzers);
@@ -54,7 +60,7 @@ public class DirectoryParser {
                 if (file.isFile() && file.getName().endsWith(".txt")) {
                     Document doc = new Document();
                     doc.add(new TextField("name", this.fileNameParse(file), Field.Store.YES));
-                    doc.add(new TextField("body", this.fileBodyParse(file), Field.Store.YES));
+                    doc.add(new TextField("body", this.fileBodyParse(file), Field.Store.NO));
                     writer.addDocument(doc);
                 }
             }
