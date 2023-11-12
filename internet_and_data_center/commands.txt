@@ -55,6 +55,8 @@ router ospf
 network 'IP_network/Netmask' area '_._._._' (0.0.0.0 backbone)
 redistribute connected
 
+redistribute kernel (to redistribute static routes into OSPF)
+
 log file /var/log/frr/frr.log
 
 
