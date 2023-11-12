@@ -1,0 +1,169 @@
+######################## KATHARA ########################
+kathara wipe
+kathara connect 'device'
+kathara lstart  
+
+
+
+######################## CONF ########################
+'device'['interface']='domain' (no spaces!!)
+
+'device'[image]="kathara/frr" (uploading frr config)
+
+'device'[image]="kathara/base" (uploading webserver or DNS config)
+
+
+
+######################## STARTUP ########################
+ip a add 'IP/Netmask' dev eth'interface' (specifies the IPs of the interfaces)
+
+ip route add default via 'IP' dev eth'interface' (sets a default route)
+ip route add 'IP_network/Netmask' via 'IP_by' dev eth'interface' (sets a static route)
+
+systemctl start frr (automatically start the frr daemon)
+systemctl start apache2 (automatically start apache2 server)
+systemctl start named (automatically start DNS)
+
+
+
+######################## FRR RIP CONF ########################
+router rip (talk rip on some interface)
+redistribute connected (redistribute to rip neighbors' information about all directly connected subnets)
+network 'IP_network/Netmask' (send rip multicast packets to interfaces falling into this prefix)
+
+configure 
+router rip 
+route 0.0.0.0/0 (statically configure the default route)
+
+log file /var/log/frr/frr.log
+
+
+
+######################## FRR OSPF CONF ########################
+TIP: in ospf each router as ID like the IP address of the highest interface
+TIP: in ospf each lan as a designeted router chosed by highest priority or highest ID
+TIP: in ospf each lan as ID like designeted router interface in that lan
+TIP: each router interface is associated with a single area
+TIP: specifying the area type is not required for the backbone area
+
+TIP: locate config file on '"device"/etc/frr/' 
+
+interface eth'interface' (to set ospf interface costs)
+ospf cost 'cost'
+
+router ospf
+network 'IP_network/Netmask' area '_._._._' (0.0.0.0 backbone)
+redistribute connected
+
+log file /var/log/frr/frr.log
+
+
+
+######################## WEB SERVER CONF ########################
+TIP: locate web page on '"device"/var/www/html/index.html'
+links http://'HOST_IP' (open web browser on the client)
+tail -f /var/log/apache2/access.log (to monitor accesses to the web server)
+tail -f /var/log/apache2/error.log (to monitor error to the web server)
+
+
+
+######################## DNS CONF ########################
+TIP: locate config file on '"device"/etc/bind/' 
+
+TIP: locate pc local resolver config on '"device"/etc/' 
+cat /etc/resolv.conf (specification of the default name server)
+EXAMPLE:
+
+nameserver 192.168.0.110
+search uniroma3.it
+
+cat /etc/bind/named.conf (associations between zones and name servers)
+EXAMPLE:
+
+include "/etc/bind/named.conf.options"; (include some additional configuration)
+zone "." {
+    type hint;
+    file "/etc/bind/db.root"; (where to find information about the root name server)
+};
+zone "uniroma3.it" {
+    type master;
+    file "/etc/bind/db.it.uniroma3"; (where to find data about the names in this zone)
+};
+
+cat /etc/bind/named.conf.options (additional configuration)
+EXAMPLE:
+
+options {
+    directory "/var/cache/bind"; (use this folder to store the cache)
+    allow-recursion { 192.168.0.0/24; }; (allow recursive query from this IP just for local DNS)
+    dnssec-validation no; (do not validate DNSSEC over the recursive queries just for local DNS)
+};
+
+cat /etc/bind/db.root
+EXAMPLE:
+
+. IN NS ROOT-SERVER. 
+ROOT-SERVER. IN A 192.168.0.5 (a resource record: <domain> <class> <type> <record data>)
+
+cat /etc/bind/db.'name server'
+TIP: '@' is the domain name in the zone statement of the server configuration file
+TIP: all domain names in this data file that are not fully qualified (do not end with a ‘.’) are relative to the origin
+EXAMPLE:
+
+$TTL 60000 (time to live, in seconds)
+@               IN      SOA     dnsuni.uniroma3.it.    root.dnsuni.uniroma3.it. (       (authority server for this zone (dnsuni.uniroma3.org))
+						2006031201 ; serial         (serial number, determines how recent the information is)
+						28 ; refresh                (refresh interval in seconds)
+						14 ; retry                  (interval in seconds between subsequent attempts to contact the master)
+						3600000 ; expire            (slave expire time in seconds)
+						0 ; negative cache ttl      (ttl for negative responses from authoritative name servers)
+						)
+
+@						IN	NS	dnsuni.uniroma3.it. (the authoritative name server for this zone)
+dnsuni.uniroma3.it.		IN	A	192.168.0.11        (record type address)
+
+pc1.uniroma3.it.		IN	A	192.168.0.111
+localuni.uniroma3.it.	IN	A	192.168.0.110
+
+
+
+
+
+######################## VTYSH CONF ########################
+service integrated-vtysh-config
+
+
+
+######################## RUNTIME DEBUG ########################
+ping 'IP'
+traceroute 'IP'
+
+ip link
+ip address
+ip route (routing table)
+ip link set eth'interface' down (shutting down interface)
+
+tcpdump -tenni eth'interface' (sniffer)
+tcpdump –tenni eth'interface' -v (display packet details)
+
+cat /etc/frr/daemons (daemons configuration file)
+cat /etc/frr/vtysh.conf (vtysh configuration file)
+
+vtysh (frr built-in shell, ‘?’ to retreive all commands available)
+    show ip route (frr routing table)
+
+    show ip rip (inspecting the rip routing table)
+
+    show ip ospf route (dump the ospf routing table)
+    show ip ospf interface
+    show ip ospf neighbor (router neighbors)
+
+    (ospf network topology)
+    show ip ospf database (designeter routers and links)
+    show ip ospf database router (routers connection)
+    show ip ospf database network (links attached interfaces)
+    show ip ospf database summary (what routers know about the outside of the area)
+
+    vtysh -e "show ip ospf interface" | egrep "eth|Cost" (nterface costs)
+
+    show running-config (current frr configuration)
