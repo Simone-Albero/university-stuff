@@ -1,24 +1,24 @@
 ######################## KATHARA ########################
 kathara wipe
-kathara connect 'device'
+kathara connect <device>
 kathara lstart  
 
 
 
 ######################## CONF ########################
-'device'['interface']='domain' (no spaces!!)
+<device>[<interface>]=<domain> (no spaces!!)
 
-'device'[image]="kathara/frr" (uploading frr config)
+<device>[image]="kathara/frr" (uploading frr config)
 
-'device'[image]="kathara/base" (uploading webserver or DNS config)
+<device>[image]="kathara/base" (uploading webserver or DNS config)
 
 
 
 ######################## STARTUP ########################
-ip a add 'IP/Netmask' dev eth'interface' (specifies the IPs of the interfaces)
+ip a add <IP>/<Netmask> dev eth<interface> (specifies the IPs of the interfaces)
 
-ip route add default via 'IP' dev eth'interface' (sets a default route)
-ip route add 'IP_network/Netmask' via 'IP_by' dev eth'interface' (sets a static route)
+ip route add default via <IP> dev eth<interface> (sets a default route)
+ip route add <IP_network>/<Netmask> via <IP_by> dev eth<interface> (sets a static route)
 
 systemctl start frr (automatically start the frr daemon)
 systemctl start apache2 (automatically start apache2 server)
@@ -28,12 +28,13 @@ systemctl start named (automatically start DNS)
 
 ######################## FRR RIP CONF ########################
 router rip (talk rip on some interface)
-redistribute connected (redistribute to rip neighbors' information about all directly connected subnets)
-network 'IP_network/Netmask' (send rip multicast packets to interfaces falling into this prefix)
+redistribute connected (redistribute connected networks to rip neighbors)
+redistribute bgp (redistribute bgp-learned routes to rip neighbors)
+network <IP_network>/<Netmask> (send rip multicast packets to interfaces falling into this prefix)
 
 configure 
 router rip 
-route 0.0.0.0/0 (statically configure the default route)
+route <IP>/<Netmask> (statically configure the default route)
 
 log file /var/log/frr/frr.log
 
@@ -48,11 +49,11 @@ TIP: specifying the area type is not required for the backbone area
 
 TIP: locate config file on '"device"/etc/frr/' 
 
-interface eth'interface' (to set ospf interface costs)
-ospf cost 'cost'
+interface eth<interface> (to set ospf interface costs)
+ospf cost <cost>
 
 router ospf
-network 'IP_network/Netmask' area '_._._._' (0.0.0.0 backbone)
+network <IP_network>/<Netmask> area <_._._._> (0.0.0.0 backbone)
 redistribute connected
 
 redistribute kernel (to redistribute static routes into OSPF)
@@ -61,18 +62,84 @@ log file /var/log/frr/frr.log
 
 
 
+######################## FRR BGP CONF ########################
+TIP: each router, for each prefix, chooses one of the received announcements as the “best”, only the best routes are (possibly) announced to peers
+
+TIP: prefix-list entries are ordered according to a sequence number and the first matching entry is applied
+TIP: prefix-lists default to deny
+TIP: more specific and less specific prefixes are considered different prefixes
+
+router bgp <my-as-number>
+
+neighbor <neighbor-ip> remote-as <neighbor-as-num> 
+neighbor <neighbor-ip> description <text>
+
+network <network-ip>/<network-mask> (lan attached to current as)
+
+no bgp network import-check (disable check of existence of the prefix in kernel)
+no bgp ebgp-requires-policy (disable check of the existence of incoming and outgoing filters)
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ STUB AS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+neighbor <neighbor-ip> default-originate (enables the local router to send the default route 0.0.0.0 to a neighbor)
+no bgp network import-check (needed)
+
+
+TIP: a default route originated with network 0.0.0.0/0 is handled like any other route
+TIP: a default route originated with default- originate is processed by a different route-map
+neighbor <neighbor-ip> default-originate route-map <r-map-name> in/out
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FILTERING @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+neighbor <neighbor-ip> prefix-list <p-list-name> in/out
+
+neighbor <neighbor-ip> filter-list <acl-name> in/out
+
+neighbor <neighbor-ip> route-map <r-map-name> in/out
+
+ip prefix-list <p-list-name> permit/deny <network/mask> (used to filter prefixes)
+
+ip as-path access-list <acl-name> permit/deny <regexp>
+
+TIP: route-maps may consist of multiple statements processed in the order established by sequence numbers, only one statement is applied
+TIP: announcements that are not matched by any statement, or that are matched by a deny statement are simply filtered out (set commands in a route-map deny are useless)
+TIP: without a match condition is always a match
+route-map <r-map-name> permit/deny <seq-number>
+    match <announce-property>
+    set <attribute-setting>
+
+EXAMPLE:
+...
+match ip address <acl-name>
+set metric 5
+set local-preference 25
+...
+access-list <acl-name> permit/deny <network/mask> (as filtering, access-lists default to deny)
+
+...
+match ip address prefix-list <prefix-list-name>
+...
+ip prefix-list <p-list-name> permit/deny <network/mask> (ip filtering)
+
+TIP: metric multi-exit-discriminator (asking another as to prefer lower values of it, dafult is 0)
+TIP: local-pref (prefer higher values, default is 100)
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
 ######################## WEB SERVER CONF ########################
-TIP: locate web page on '"device"/var/www/html/index.html'
-links http://'HOST_IP' (open web browser on the client)
+TIP: locate web page on '<device>/var/www/html/index.html'
+links http://<HOST_IP> (open web browser on the client)
 tail -f /var/log/apache2/access.log (to monitor accesses to the web server)
 tail -f /var/log/apache2/error.log (to monitor error to the web server)
 
 
 
 ######################## DNS CONF ########################
-TIP: locate config file on '"device"/etc/bind/' 
+TIP: locate config file on '<device>/etc/bind/' 
 
-TIP: locate pc local resolver config on '"device"/etc/' 
+TIP: locate pc local resolver config on '<device>/etc/' 
 cat /etc/resolv.conf (specification of the default name server)
 EXAMPLE:
 
@@ -130,23 +197,22 @@ localuni.uniroma3.it.	IN	A	192.168.0.110
 
 
 
-
 ######################## VTYSH CONF ########################
 service integrated-vtysh-config
 
 
 
 ######################## RUNTIME DEBUG ########################
-ping 'IP'
-traceroute 'IP'
+ping <IP>
+traceroute <IP>
 
 ip link
 ip address
 ip route (routing table)
-ip link set eth'interface' down (shutting down interface)
+ip link set eth<interface> down (shutting down interface)
 
-tcpdump -tenni eth'interface' (sniffer)
-tcpdump –tenni eth'interface' -v (display packet details)
+tcpdump -tenni eth<interface> (sniffer)
+tcpdump –tenni eth<interface> -v (display packet details)
 
 cat /etc/frr/daemons (daemons configuration file)
 cat /etc/frr/vtysh.conf (vtysh configuration file)
