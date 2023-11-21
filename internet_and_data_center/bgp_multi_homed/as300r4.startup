@@ -1,0 +1,3 @@
+ip address add 200.1.64.2/18 dev eth0
+ip address add 200.1.128.2/17 dev eth1
+systemctl start frr
