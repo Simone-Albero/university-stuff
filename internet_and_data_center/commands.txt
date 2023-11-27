@@ -117,7 +117,7 @@ set metric 5
 set local-preference 25
 ...
 access-list <acl-name> permit/deny <network/mask> (match a prefix as well as all its more specifics, access-lists default to deny)
-access-list <acl-name> permit/deny <network/mask> exactmatch (exact match)
+access-list <acl-name> permit/deny <network/mask> exact-match (exact match)
 
 ...
 match ip address prefix-list <prefix-list-name>
