@@ -1,0 +1,61 @@
+
+#!/bin/bash
+#interpretata dal kernel per capire chi lancia l'eseguibile
+
+#nc shell
+#!/bin/bash
+nc -vlp 1337 -e /bin/bash #sulla macchina che si mette in ascolto 
+
+nc -nv 192.168.65.3 1337 #sulla macchina che vuole connettersi alla shel
+
+# ssh
+sudo systemctl | grep ssh
+sudo systemctl status ssh
+sudo systemctl enable ssh
+sudo systemctl start ssh
+
+ip a 
+ssh utente@ip
+
+#login diretto con root (c'è una password impostata per root)
+sudo cat /etc/shadow | grep root
+passwd --delete root #attenzione non disabilità l'accesso 
+passwd -l root #impedisce il login all'utente
+
+#un utente generico è diventato root
+sudo su "utente" #mi loggo come l'utente
+hystory #hystory dei comandi dell'utente
+sudo visudo #controllo il file sudoers
+
+sudo cat /etc/sudoers.d/ #file sudoers dei vari utenti
+sudo rm /etc/sudoers.d/"utente" #attenzione l'utente potrebbe essere in un gruppo con i permessi
+
+#configurazioni sudoers
+root ALL = (ALL:ALL) ALL #user host = (user:group) command (who where = (as_whom) what)
+%sudo ALL = (ALL:ALL) ALL #group host = (user:group) command
+
+#suid e guid
+sudo find / -type f -perm /4000 -exec ls -l {} \; #suid (-executable per eseguibili)
+sudo find / -type f -perm /2000 -exec ls -l {} \; #guid
+sudo find / -type f -perm /6000 -exec ls -l {} \; #both
+
+#firewal 
+sudo iptables -nvL #stampa tutte le regole del firewall
+sudo netstat -tulnp #controlla le porte aperte
+
+#a questo punto individuo il servizio esposto e lo confino a localhost
+#su mariadb
+#tee -a è un eseguible che mi fa fare append su un file
+echo "bind-address = 127.0.0.1" | sudo tee -a /etc/mysql/my.cnf
+
+#configurazioni
+#accetta connessioni enstablish
+#cambia la regola di default in drop
+sudo iptables -A INPUT -m state --state ENSTABLISHED,RELATED -j ACCEPT
+sudo iptables -P INPUT DROP
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+
+sudo iptables-save #prendo la configurazione
+
+sudo iptables-restore <<EOT <configurazione> EOT #applica la configurazione
