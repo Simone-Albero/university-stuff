@@ -1,0 +1,56 @@
+#docker privilege escalation
+docker run -v /etc/:/mnt -it image #we have access of the shadow file, 
+
+docker run -it -v /:/host/ image chroot /host/bash #Run the image mounting the host disk and chroot on it
+
+# systemctl
+sudo systemctl | grep ssh
+sudo systemctl status ssh
+sudo systemctl enable ssh
+sudo systemctl start ssh
+
+# ssh
+ip a 
+ssh utente@ip
+
+#login diretto con root (c'è una password impostata per root)
+sudo cat /etc/shadow | grep root
+passwd --delete root #attenzione non disabilità l'accesso 
+passwd -l root #impedisce il login all'utente
+
+
+#un utente generico è diventato root
+su - "utente" #mi loggo come l'utente
+hystory #hystory dei comandi dell'utente
+sudo visudo #controllo il file sudoers
+echo 'foobar ALL=(ALL:ALL) ALL' | sudo EDITOR='tee -a' visudo #edit sudoers from bash script
+
+sudo cat /etc/sudoers.d/ #file sudoers dei vari utenti
+sudo rm /etc/sudoers.d/"utente" #attenzione l'utente potrebbe essere in un gruppo con i permessi
+
+#connessione esposta su mariadb 
+sudo netstat -tulnp #controlla le porte aperte
+
+#a questo punto individuo il servizio esposto e lo confino a localhost
+#su mariadb
+#tee -a è un eseguible che mi fa fare append su un file
+echo "bind-address = 127.0.0.1" | sudo tee -a /etc/mysql/my.cnf
+
+#configurazioni firewal
+#accetta connessioni enstablish
+#cambia la regola di default in drop
+sudo iptables -nvL #stampa tutte le regole del firewall
+
+sudo iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT #-j indica cosa fare se la regola viene metchata
+sudo iptables -P INPUT DROP #-P regola di default
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+
+sudo iptables-save #prendo la configurazione
+
+sudo iptables-restore <<EOT <configurazione> EOT #applica la configurazione
+
+
+
+
+

