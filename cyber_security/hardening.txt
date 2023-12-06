@@ -68,7 +68,12 @@ sudo chage -M 1 -m 0 foo #pwd cannot be used for more than 1 days and changed be
 
 ####################################### CHANGING SUDOERS CONFIGURATION #######################################
 root ALL = (ALL:ALL) ALL #user host(user:group) cmds (who where = (as_whom) what)
-%sudo ALL = (ALL:ALL) ALL #group host(user:group) cmds
+%sudo ALL = (ALL:ALL) ALL #group host(user:group) 
+
+echo "user ALL(ALL:ALL) /bin/cat" | sudo EDITOR="tee -a" visudo
+
+# https://stackoverflow.com/questions/13626798/editing-the-sudo-file-in-a-shell-script (replace entry on soudoers)
+
 
 ######################################## SEARCHING ALL EXEC WITH SUID ########################################
 sudo find / -type f -perm /4000 -exec ls -l {} \; #suid (-executable per eseguibili)
