@@ -1,0 +1,50 @@
+################################################ RIP ################################################
+router rip (talk rip on some interface)
+redistribute connected (redistribute connected networks to rip neighbors)
+redistribute bgp (redistribute bgp-learned routes to rip neighbors)
+network <IP_network>/<Netmask> (send rip multicast packets to interfaces falling into this prefix)
+
+
+------------------------------------------- STATIC ROUTE --------------------------------------------
+configure 
+router rip 
+route <IP>/<Netmask> (statically configure the default route)
+
+log file /var/log/frr/frr.log
+
+
+
+------------------------------------------ TRANSIT BGP AS ------------------------------------------
+ip prefix-list myNeighbor permit 50.3.8.0/24 le 32
+route-map eBGP permit 10
+match ip next-hop prefix-list myNeighbor
+
+router rip
+redistribute connected
+redistribute bgp route-map eBGP
+network 100.0.0.0/8
+
+neighbor 2.2.2.2 remote-as 100
+neighbor 2.2.2.2 description Router as100rabe1
+neighbor 2.2.2.2 update-source 3.3.3.3
+
+################################################ OSPF ###############################################
+TIP: in ospf each router as ID like the IP address of the highest interface
+TIP: in ospf each lan as a designeted router chosed by highest priority or highest ID
+TIP: in ospf each lan as ID like designeted router interface in that lan
+TIP: each router interface is associated with a single area
+TIP: specifying the area type is not required for the backbone area
+
+TIP: locate config file on '"device"/etc/frr/' 
+
+interface eth<interface> (to set ospf interface costs)
+ospf cost <cost>
+
+router ospf
+network <IP_network>/<Netmask> area <_._._._> (0.0.0.0 backbone)
+area <_._._._> stub (not needed on backbone)
+redistribute connected
+
+redistribute kernel (to redistribute static routes into OSPF)
+
+log file /var/log/frr/frr.log

@@ -1,0 +1,5 @@
+ip a add 100.0.1.1/24 dev eth0
+ip a add 100.0.0.1/30 dev eth1
+ip a add 100.10.0.1/30 dev eth2
+
+systemctl start frr

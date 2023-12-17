@@ -1,0 +1,25 @@
+################################################ LAB.CONF ################################################
+<device>[<interface>]=<domain> (no spaces!!)
+
+<device>[image]="kathara/frr" (uploading frr config)
+
+<device>[image]="kathara/base" (uploading webserver or DNS config)
+
+
+
+################################################ .STARTUP ################################################
+ip a add <IP>/<Netmask> dev eth<interface> (specifies the IPs of the interfaces)
+
+
+---------------------------------------------- STATIC ROUTE ----------------------------------------------
+ip route add default via <IP> dev eth<interface> (sets a default route)
+ip route add <IP_network>/<Netmask> via <IP_by> dev eth<interface> (sets a static route)
+
+
+--------------------------------------------------- DAEMONS ----------------------------------------------
+systemctl start frr (automatically start the frr daemon)
+systemctl start apache2 (automatically start apache2 server)
+systemctl start named (automatically start DNS)
+
+------------------------------------------------ LOOPBACK ------------------------------------------------
+ifconfig lo:1 2.2.2.2 netmask 255.255.255.255 up 

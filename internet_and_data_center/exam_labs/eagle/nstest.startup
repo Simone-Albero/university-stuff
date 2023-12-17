@@ -1,0 +1,5 @@
+ip a add 20.0.0.3/24 dev eth0
+
+ip route add default via 20.0.0.1 dev eth0
+
+systemctl start named

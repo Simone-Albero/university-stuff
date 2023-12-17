@@ -1,0 +1,5 @@
+ip a add 100.1.4.1/24 dev eth0
+
+ifconfig lo:1 2.2.2.2 netmask 255.255.255.255 up
+
+systemctl start frr

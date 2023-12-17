@@ -1,0 +1,42 @@
+################################################ KATHARA ################################################
+kathara wipe
+kathara connect <device>
+kathara lstart
+
+############################################# RUNTIME DEBUG #############################################
+ping <IP>
+traceroute <IP>
+
+ip link
+ip address
+ip route (routing table)
+ip link set eth<interface> down (shutting down interface)
+
+tcpdump -tenni eth<interface> (sniffer)
+tcpdump –tenni eth<interface> -v (display packet details)
+
+links http://<HOST_IP> (open web browser on the client)
+tail -f /var/log/apache2/access.log (to monitor accesses to the web server)
+tail -f /var/log/apache2/error.log (to monitor error to the web server)
+
+cat /etc/frr/daemons (daemons configuration file)
+cat /etc/frr/vtysh.conf (vtysh configuration file)
+
+vtysh (frr built-in shell, ‘?’ to retreive all commands available)
+    show ip route (frr routing table)
+
+    show ip rip (inspecting the rip routing table)
+
+    show ip ospf route (dump the ospf routing table)
+    show ip ospf interface
+    show ip ospf neighbor (router neighbors)
+
+    (ospf network topology)
+    show ip ospf database (designeter routers and links)
+    show ip ospf database router (routers connection)
+    show ip ospf database network (links attached interfaces)
+    show ip ospf database summary (what routers know about the outside of the area)
+
+    vtysh -e "show ip ospf interface" | egrep "eth|Cost" (nterface costs)
+
+    show running-config (current frr configuration)

@@ -1,0 +1,64 @@
+################################################################### WEB SERVER ###################################################################
+TIP: locate web page on '<device>/var/www/html/index.html'
+links http://<HOST_IP> (open web browser on the client)
+tail -f /var/log/apache2/access.log (to monitor accesses to the web server)
+tail -f /var/log/apache2/error.log (to monitor error to the web server)
+
+
+
+###################################################################### DNS ######################################################################
+TIP: locate config file on '<device>/etc/bind/' 
+
+
+------------------------------------------------------------------- RESOLV.CONF -----------------------------------------------------------------
+TIP: locate pc local resolver config on '<device>/etc/' 
+
+nameserver 192.168.0.110
+search uniroma3.it
+
+
+------------------------------------------------------------------- NAMED.CONF ------------------------------------------------------------------
+
+include "/etc/bind/named.conf.options"; (include some additional configuration)
+zone "." {
+    type hint;
+    file "/etc/bind/db.root"; (where to find information about the root name server)
+};
+zone "uniroma3.it" {
+    type master;
+    file "/etc/bind/db.it.uniroma3"; (where to find data about the names in this zone)
+};
+
+-------------------------------------------------------------- NAMED.CONF.OPTION ---------------------------------------------------------------
+
+options {
+    directory "/var/cache/bind"; (use this folder to store the cache)
+    allow-recursion { 192.168.0.0/24; }; (allow recursive query from this IP just for local DNS)
+    dnssec-validation no; (do not validate DNSSEC over the recursive queries just for local DNS)
+};
+
+------------------------------------------------------------------- DB.ROOT --------------------------------------------------------------------
+
+. IN NS ROOT-SERVER. 
+ROOT-SERVER. IN A 192.168.0.5 (a resource record: <domain> <class> <type> <record data>)
+
+
+-------------------------------------------------------------------- DB.NS ---------------------------------------------------------------------
+TIP: '@' is the domain name in the zone statement of the server configuration file
+TIP: all domain names in this data file that are not fully qualified (do not end with a ‘.’) are relative to the origin
+EXAMPLE:
+
+$TTL 60000 (time to live, in seconds)
+@               IN      SOA     dnsuni.uniroma3.it.    root.dnsuni.uniroma3.it. (       (authority server for this zone (dnsuni.uniroma3.org))
+						2006031201 ; serial         (serial number, determines how recent the information is)
+						28 ; refresh                (refresh interval in seconds)
+						14 ; retry                  (interval in seconds between subsequent attempts to contact the master)
+						3600000 ; expire            (slave expire time in seconds)
+						0 ; negative cache ttl      (ttl for negative responses from authoritative name servers)
+						)
+
+@						IN	NS	dnsuni.uniroma3.it. (the authoritative name server for this zone)
+dnsuni.uniroma3.it.		IN	A	192.168.0.11        (record type address)
+
+pc1.uniroma3.it.		IN	A	192.168.0.111
+localuni.uniroma3.it.	IN	A	192.168.0.110

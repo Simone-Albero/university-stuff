@@ -1,0 +1,14 @@
+$TTL    60000
+@               IN      SOA     nsorg.org.    root.nsorg.org. (
+						2006031201 ; serial
+						28 ; refresh
+						14 ; retry
+						3600000 ; expire
+						0 ; negative cache ttl
+						)
+
+@				IN	NS	nsorg.org.
+nsorg.org.		IN	A	20.0.0.2
+
+test.org.		    IN 	NS	nstest.test.org.
+nstest.test.org.	    IN 	A	20.0.0.3

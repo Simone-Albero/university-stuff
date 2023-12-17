@@ -1,0 +1,15 @@
+$TTL   60000
+@               IN      SOA     nstest.test.org.    root.nstest.test.org. (
+                        2006031201 ; serial
+                        28800 ; refresh
+                        14400 ; retry
+                        3600000 ; expire
+                        0 ; negative cache ttl
+                        )
+
+@		    IN 	NS	nstest.test.org.
+nstest.test.org.	    IN 	A	20.0.0.3
+
+www1.test.org.    IN	A	100.0.1.2
+
+www2.test.org.    IN    A   100.0.2.2
