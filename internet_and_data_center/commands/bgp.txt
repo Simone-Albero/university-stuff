@@ -50,6 +50,7 @@ EXAMPLE:
 match ip address <acl-name>
 set metric 5
 set local-preference 25
+set community 200:11111
 ...
 access-list <acl-name> permit/deny <network/mask> (match a prefix as well as all its more specifics, access-lists default to deny)
 access-list <acl-name> permit/deny <network/mask> exact-match (exact match)
