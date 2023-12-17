@@ -23,3 +23,5 @@ systemctl start named (automatically start DNS)
 
 ------------------------------------------------ LOOPBACK ------------------------------------------------
 ifconfig lo:1 2.2.2.2 netmask 255.255.255.255 up 
+
+ip address add 2.2.2.2/24 dev lo:1 (alternativa più recente)
