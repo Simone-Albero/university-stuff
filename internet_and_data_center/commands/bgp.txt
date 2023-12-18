@@ -63,8 +63,8 @@ ip prefix-list <p-list-name> permit/deny <network/mask> (ip filtering)
 TIP: metric multi-exit-discriminator (asking another as to prefer lower values of it, dafault is 0)
 TIP: local-pref (prefer higher values, default is 100)
 
-
-ip community-list standard comm2 permit 10:2
+------------------------------------------------------------------- COMMUNITY --------------------------------------------------------------------
+bgp community-list standard comm2 permit 10:2
 
 route-map comm permit 10
     match community comm2
