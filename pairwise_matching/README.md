@@ -17,9 +17,6 @@ All configurations achieve an F1-measure above 0.8 after 100 epochs of training,
 
 ![F-measure over the epochs of each model.](plot.svg)
 
-## Further Details
-Additional informations about all the architectures and configurations can be found in our [report](report.pdf).
-
 ## Contributors
 - Simone Albero
 - Giordano Andreola
