@@ -1,0 +1,14 @@
+$TTL    60000
+@               IN      SOA     dnsnet.net.    root.dnsnet.net. (
+						2006031201 ; serial
+						28 ; refresh
+						14 ; retry
+						3600000 ; expire
+						0 ; negative cache ttl
+						)
+
+@						IN	NS	dnsnet.net.
+dnsnet.net.				IN	A	2.1.0.2
+
+pc.net.					IN	A	1.0.0.2
+local.net.				IN	A	1.2.0.2
