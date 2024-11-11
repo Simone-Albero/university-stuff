@@ -1,0 +1,124 @@
+@startuml
+
+package "decoding" {
+    class VideoDecoder {
+        - decoder: Decoder
+        - frame_counter: int
+        - print_frames: bool
+        - receiver: Receiver
+
+        __init__(print_frames: bool = True) : None
+        + process_frame(data) : bool
+    }
+
+    class Decoder {
+        - last_key_frame: Image
+        - block_size: int
+
+        __init__(block_size: int = 16) : None
+        + decode_intra_frame(frame: Jpeg) : Image
+        + decode_predicted_frame(err_frame: Jpeg, mvs: MotionVectors) : Image
+        + decode_bidirectional_frame(err_frame: Jpeg, mvs: MotionVectors) : Image
+    }
+
+    class Receiver {
+        - compresser: Compresser
+        - callback: callable
+        - server_socket: socket.socket
+        - conn: socket.socket
+        - addr: tuple
+
+        __init__(callback: callable) : None
+        + receive_data() : None
+        + close() : None
+    }
+
+
+}
+
+package "motion" {
+
+    class MotionVectors {
+        - motion_vectors: np.ndarray
+
+        __init__(height: int = None, width: int = None, vectors: any = None) : None
+        + set_vector(block_x: int, block_y: int, x_value: int, y_value: int) : None
+        + get_vector(block_x: int, block_y: int) : np.ndarray
+        + operator +(other: MotionVectors) : MotionVectors
+        + operator -(other: MotionVectors) : MotionVectors
+        + operator *(scalar: float) : MotionVectors
+        + operator /(scalar: float) : MotionVectors
+    }
+
+    class Helper {
+        compute_motion_estimation(prev_frame: Image, next_frame: Image, block_size: int, window_size: int) : MotionVectors
+        compute_motion_compensation(prev_frame: Image, motion_vectors: MotionVectors, block_size: int) : Image
+    }
+
+}
+
+package "image" {
+    class Image {
+        + image: np.ndarray
+        + color_space: str
+        - COLOR_CONVERSIONS: dict
+        
+        __init__(image: np.ndarray, color_space: str = "RGB") : None
+        + get_color_spaces(target_space: str) : tuple[np.ndarray, np.ndarray, np.ndarray]
+        + switch_color_space(target_space: str) : None
+        + print(close_on_key_press = True) : None
+        + operator +(other: Image) : Image
+        + operator -(other: Image) : Image
+    }
+
+    class Compresser {
+        + compress(bytes_data: bytes) : bytes
+        + decompress(encoded_bytes: bytes) : bytes
+        + compute_compression_ratio(original_data: bytes, encoded_data: bytes) : float
+    }
+
+    class Jpeg {
+        - DOWNSAMPLE_FACTOR: int = 2
+        - BLOCK_SIZE: int = 8
+        - SHIFT: int = 128
+        - QUANTIZATION_MATRIX_LUMINANCE: np.ndarray
+        - QUANTIZATION_MATRIX_CHROMINANCE: np.ndarray
+        - y_rle: np.ndarray
+        - cb_rle: np.ndarray
+        - cr_rle: np.ndarray
+        - original_shape: Tuple[int, int]
+
+        __init__(image: Image = None) : None
+        + encode(image: Image) : None
+        + decode() : Image
+        + load_from_file(filename: str) : None
+        - _downsample_matrix(matrix: np.ndarray, dtype: type) : np.ndarray
+        - _upsample_matrix(matrix: np.ndarray, dtype: type) : np.ndarray
+        - _blockproc(matrix: np.ndarray, func: callable, dtype: type) : np.ndarray
+        - _apply_dct(matrix: np.ndarray, dtype: type) : np.ndarray
+        - _apply_idct(matrix: np.ndarray, dtype: type) : np.ndarray
+        - _apply_quantization(matrix: np.ndarray, quantization_matrix: np.ndarray, dtype: type) : np.ndarray
+        - _apply_dequantization(matrix: np.ndarray, quantization_matrix: np.ndarray, dtype: type) : np.ndarray
+        - _apply_zigzag(matrix: np.ndarray, dtype: type) : np.ndarray
+        - _apply_izigzag(zigzag_matrix: np.ndarray, matrix_shape: Tuple[int, int], dtype: type) : np.ndarray
+        - _apply_dc_subtraction(matrix: np.ndarray) : None
+        - _apply_dc_addition(matrix: np.ndarray) : None
+        - _apply_rle(matrix: np.ndarray, dtype: type) : np.ndarray
+        - _apply_irle(rle_rows: np.ndarray, dtype: type) : np.ndarray
+    }
+}
+
+
+VideoDecoder --> Decoder
+VideoDecoder --> Receiver
+
+Decoder --> Jpeg
+Decoder --> MotionVectors
+Decoder --> Image
+
+Receiver --> VideoDecoder : callback
+Receiver ..> Compresser : uses
+
+Decoder ..> Helper : uses
+
+@enduml
